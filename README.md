@@ -10,6 +10,7 @@ A collection of shell scripts to set up and maintain Linux desktops (mostly Fedo
 | [`convert-to-md.sh`](convert-to-md.sh) | Converts all PDFs in the parent directory to Markdown | `markitdown` |
 | [`extensions-restore.sh`](extensions-restore.sh) | Restores GNOME Shell extension settings from backups | GNOME |
 | [`fix-cedilla.sh`](fix-cedilla.sh) | Makes `'` + `c` produce `ç` instead of `ć` | X11/Wayland |
+| [`fix-dim-after-resume.sh`](fix-dim-after-resume.sh) | Undoes the screen dimming that stays stuck after waking from sleep | KDE Plasma 6 |
 | [`install-vbox-ga.sh`](install-vbox-ga.sh) | Installs VirtualBox Guest Additions matching the host version | VirtualBox VM (dnf/yum/apt) |
 | [`monitor60mhz.sh`](monitor60mhz.sh) / [`monitor144mhz.sh`](monitor144mhz.sh) | Switches the monitors' refresh rate to 60 Hz / 144 Hz | KDE Plasma |
 | [`plasma-setup.sh`](plasma-setup.sh) | Applies the full KDE Plasma layout (theme, panels, widgets, KZones) | KDE Plasma 6 |
@@ -52,6 +53,17 @@ Loads each `<extension>.config` from `~/Backups/Gnome/Configs/Extensions/` into 
 Creates `~/.XCompose` from the system Compose file or, if it already exists, edits it in place (with a `.bak` backup). Replaces both the strings (`ć`/`Ć`) and the keysyms (`U0107`/`U0106`), so it also works in apps that read the keysym (e.g. Chromium on Wayland). Safe to run again. Log out and back in afterwards.
 
 Based on [gnome-cedilla-fix](https://github.com/marcopaganini/gnome-cedilla-fix).
+
+### fix-dim-after-resume.sh
+
+```sh
+./fix-dim-after-resume.sh             # reset the dimming once, now
+./fix-dim-after-resume.sh install     # reset it automatically after every resume
+./fix-dim-after-resume.sh status
+./fix-dim-after-resume.sh uninstall   # once the bug is fixed upstream
+```
+
+Workaround for a Plasma 6 bug (seen on 6.8.3): after resume, the "dim automatically" multiplier stays applied (e.g. `dimming to 30%` in `kscreen-doctor -o`), so the screens stay dark even with brightness at 100%. `install` copies the script to `~/.local/bin/` and adds a systemd user service that listens for logind's `PrepareForSleep(false)` and runs `kscreen-doctor output.<name>.dimming.100` on every connected output (2, 5 and 10 s after waking up).
 
 ### install-vbox-ga.sh
 
