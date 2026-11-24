@@ -17,6 +17,12 @@ A collection of shell scripts to set up and maintain Linux desktops (mostly Fedo
 | [`tweaks-gnome-shell.sh`](tweaks-gnome-shell.sh) | GNOME font, window and theme tweaks | GNOME |
 | [`user-backup.sh`](user-backup.sh) | Archives the personal folders into `~/<hostname>/` | — |
 
+## Notes
+
+| Note | What it covers | Environment |
+| --- | --- | --- |
+| [`i2c-udev-permission.md`](i2c-udev-permission.md) | udev group rule that stops PowerDevil's `EACCES` errors on `/dev/i2c-*` (DDC/CI) after resume | KDE Plasma 6, ddcutil |
+
 ## Details
 
 ### cleanup_old_kernels.sh
